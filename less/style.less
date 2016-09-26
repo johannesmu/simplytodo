@@ -1,0 +1,130 @@
+// functions
+.full-height(){
+  height: 100%;
+}
+.full-width(){
+  width:100%;
+}
+.no-pad(){
+  margin: 0;
+  padding: 0;
+}
+.relative(){
+  position: relative;
+}
+.absolute(){
+  position: absolute;
+}
+.flex-row(){
+  display: flex; flex-direction: row;
+}
+.vcenter(){
+  align-items: center;
+}
+.hcenter(){
+  justify-content: center;
+}
+// colours
+@main-font-family:arial,helvetica,sans-serif;
+@main-font-color:white;
+@main-color:#2196F3;
+@main-font-size:18px;
+@header-height:50px;
+// styles
+html,body{
+  .full-height;
+}
+body{
+  font-family: @main-font-family;
+  font-size: @main-font-size;
+  background-color: lighten(@main-color,40%);
+  .no-pad;
+}
+.app-view{
+  .full-height;
+  .relative;
+}
+header{
+  .absolute;
+  top:0;
+  left:0;
+  .full-width;
+  padding:0 10px;
+  background-color: @main-color;
+  height: @header-height;
+  font-weight: 200;
+  color:@main-font-color;
+  .flex-row;
+  justify-content: space-between;
+  .vcenter;
+  box-sizing: border-box;
+  h1{
+    .no-pad;
+    font-size: @main-font-size*1.2;
+  }
+  button{
+    color:inherit;
+    padding:10px;
+    font-size: @main-font-size*1.2;
+    background-color: darken(@main-color,20%);
+    border:1px solid darken(@main-color,20%);
+    outline:0;
+    visibility: hidden;
+    transition: all 0.5s;
+  }
+  #remove.show{
+    visibility: visible;
+  }
+}
+main{
+  padding:@header-height 0;
+  box-sizing: border-box;
+}
+#task-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  li{
+    padding:10px;
+    font-size: @main-font-size*1.5;
+    color:darken(@main-font-color,50%);
+    transition:all 0.5s;
+    background:white;
+    border-bottom:1px solid #cccccc;
+  }
+  li.done{
+    color:darken(@main-font-color,20%);
+    text-decoration: line-through;
+    padding-left:50px;
+  }
+}
+footer{
+  .absolute;
+  bottom:0;
+  left:0;
+  .full-width;
+  height:@header-height;
+  background-color: white;
+}
+#input-form{
+  .flex-row;
+  button{
+    width:48px;
+    height: 48px;
+    background-color: darken(@main-color,20%);
+    color: lighten(@main-color,30%);
+    font-size: 28px;
+    border:1px darken(@main-color,20%) solid;
+    border-radius: 50%;
+    outline:none;
+  }
+}
+#input-form input{
+  // width:100%;
+  border:1px white solid;
+  flex:1 0 0;
+  outline:0;
+  font-size:22px;
+  padding:2px;
+  box-sizing: border-box;
+}
