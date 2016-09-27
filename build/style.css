@@ -12,6 +12,7 @@ body {
 .app-view {
   height: 100%;
   position: relative;
+  overflow: hidden;
 }
 header {
   position: absolute;
@@ -50,11 +51,15 @@ header #remove.show {
 main {
   padding: 50px 0;
   box-sizing: border-box;
+  max-height: 100%;
+  overflow-y: auto;
 }
 #task-list {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 #task-list li {
   padding: 10px;
@@ -63,6 +68,10 @@ main {
   transition: all 0.5s;
   background: white;
   border-bottom: 1px solid #cccccc;
+  box-shadow: 0 2px 4px #333;
+}
+#task-list li:active {
+  box-shadow: 0 2px 4px #333;
 }
 #task-list li.done {
   color: #cccccc;

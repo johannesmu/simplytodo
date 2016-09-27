@@ -24,6 +24,9 @@
 .hcenter(){
   justify-content: center;
 }
+.hidden(){
+  overflow:hidden;
+}
 // colours
 @main-font-family:arial,helvetica,sans-serif;
 @main-font-color:white;
@@ -43,6 +46,7 @@ body{
 .app-view{
   .full-height;
   .relative;
+  .hidden;
 }
 header{
   .absolute;
@@ -79,11 +83,15 @@ header{
 main{
   padding:@header-height 0;
   box-sizing: border-box;
+  max-height: 100%;
+  overflow-y:auto;
 }
 #task-list{
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 100%;
+  .hidden;
   li{
     padding:10px;
     font-size: @main-font-size*1.5;
@@ -91,6 +99,10 @@ main{
     transition:all 0.5s;
     background:white;
     border-bottom:1px solid #cccccc;
+    box-shadow: 0 2px 4px #333;
+  }
+  li:active{
+    box-shadow: 0 2px 4px #333;
   }
   li.done{
     color:darken(@main-font-color,20%);
