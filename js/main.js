@@ -4,6 +4,7 @@ var todo = [];
 window.addEventListener("load",function(){
   loadList(todo);
   showButton("remove",todo);
+  //listener for touch on the list of tasks
   document.getElementById("task-list").addEventListener("touchend",function(event){
     id=event.target.getAttribute("id");
     document.getElementById(id).setAttribute("class","done");
@@ -82,6 +83,7 @@ function renderList(elm,list_array){
     listitem.appendChild(listtext);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
+    listitem.setAttribute("contenteditable","true");
     if(item.status==1){
       listitem.setAttribute("class","done");
     }
