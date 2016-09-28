@@ -83,7 +83,6 @@ function renderList(elm,list_array){
     listitem.appendChild(listtext);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
-    listitem.setAttribute("contenteditable","true");
     if(item.status==1){
       listitem.setAttribute("class","done");
     }
