@@ -32,5 +32,8 @@
     "less": "^2.7.1",
     "pug": "^2.0.0-beta6",
     "run-sequence": "^1.2.2"
+  },
+  "devDependencies": {
+    "gulp-pug-beautify": "0.0.1"
   }
 }

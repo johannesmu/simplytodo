@@ -2,6 +2,7 @@
 var todo = [];
 
 window.addEventListener("load",function(){
+  addCordovaEvents();
   loadList(todo);
   showButton("remove",todo);
   //listener for touch on the list of tasks
@@ -62,6 +63,7 @@ function loadList(list_array){
     try{
       if(JSON.parse(localStorage.getItem("tasks"))){
         todo = JSON.parse(localStorage.getItem("tasks"));
+        //console.log(todo);
       }
     }
     catch(error){
@@ -83,7 +85,6 @@ function renderList(elm,list_array){
     listitem.appendChild(listtext);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
-    listitem.setAttribute("contenteditable","true");
     if(item.status==1){
       listitem.setAttribute("class","done");
     }
@@ -106,4 +107,30 @@ function showButton(element,arr){
   else{
     document.getElementById(element).removeAttribute("class");
   }
+}
+
+function changeStatus(id,status,arr){
+  for(i=0;i<arr.length;i++){
+    taskitem = arr[i];
+    if(taskitem.id == id){
+      taskitem.status = 1;
+      saveList(todo);
+    }
+  }
+}
+
+function addCordovaEvents(){
+  document.addEventListener("deviceready",onDeviceReady,false);
+}
+function onDeviceReady(){
+  document.addEventListener("pause",function(){
+    saveList(todo);
+  },false);
+  document.addEventListener("resume",function(){
+    loadList(todo);
+  },false);
+  document.addEventListener("backbutton",function(){
+    saveList(todo);
+    navigator.app.exitApp();
+  },false);
 }
