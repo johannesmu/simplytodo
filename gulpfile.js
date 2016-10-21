@@ -4,8 +4,8 @@ var less = require('gulp-less');
 var pug = require('gulp-pug');
 var minify = require('gulp-minify');
 var browserSync = require('browser-sync').create();
-var cached = require('gulp-cached');
-var beautify = require('gulp-beautify');
+// var beautify = require('gulp-beautify');
+var prettify = require('gulp-prettify');
 var runsequence = require('run-sequence');
 
 //paths
@@ -22,7 +22,8 @@ gulp.task('less', function(){
 gulp.task('pug', function(){
   return gulp.src('./templates/*.pug')
   .pipe(pug())
-  //.pipe(beautify({indentSize: 2}))
+  // .pipe(beautify({indentSize: 2}))
+	.pipe(prettify())
   .pipe(browserSync.reload({stream: true}))
   .pipe(gulp.dest('./build'));
 });

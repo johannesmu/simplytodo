@@ -19,7 +19,7 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 0 0 10px;
   background-color: #2196F3;
   height: 50px;
   font-weight: 200;
@@ -38,6 +38,7 @@ header h1 {
 header button {
   color: inherit;
   padding: 10px;
+  height: 100%;
   font-size: 21.6px;
   background-color: #0960a5;
   border: 1px solid #0960a5;
