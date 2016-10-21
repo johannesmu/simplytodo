@@ -30,7 +30,7 @@ gulp.task('pug', function(){
 });
 gulp.task('js', function(){
   return gulp.src('js/main.js')
-  .pipe(minify())
+  //.pipe(minify())
   .pipe(browserSync.reload({stream: true}))
   .pipe(gulp.dest('./build'));
 });
