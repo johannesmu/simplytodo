@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/johannes/projects/simplytodo/cordova/simplytodo/platforms/android/build/intermediates/exploded-aar/android/CordovaLib/unspecified/debug/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="d1d969d4a7931622bfb2878d83b43a7470929d9f">
+        <dex dex="/Users/johannes/projects/simplytodo/cordova/simplytodo/platforms/android/build/intermediates/pre-dexed/debug/CordovaLib-unspecified-debug_dafc7abcdc309d01c557cd15167b332f403389c8.jar" />
+    </item>
+
+</items>
