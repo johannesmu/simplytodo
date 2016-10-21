@@ -2,6 +2,7 @@
 var todo = [];
 
 window.addEventListener("load",function(){
+  addCordovaEvents();
   loadList(todo);
   showButton("remove",todo);
   //listener for touch on the list of tasks
@@ -62,7 +63,7 @@ function loadList(list_array){
     try{
       if(JSON.parse(localStorage.getItem("tasks"))){
         todo = JSON.parse(localStorage.getItem("tasks"));
-        console.log(todo);
+        //console.log(todo);
       }
     }
     catch(error){
@@ -116,4 +117,20 @@ function changeStatus(id,status,arr){
       saveList(todo);
     }
   }
+}
+
+function addCordovaEvents(){
+  document.addEventListener("deviceready",onDeviceReady,false);
+}
+function onDeviceReady(){
+  document.addEventListener("pause",function(){
+    saveList(todo);
+  },false);
+  document.addEventListener("resume",function(){
+    loadList(todo);
+  },false);
+  document.addEventListener("backbutton",function(){
+    saveList(todo);
+    navigator.app.exitApp();
+  },false);
 }
