@@ -7,6 +7,7 @@ var browserSync = require('browser-sync').create();
 // var beautify = require('gulp-beautify');
 var prettify = require('gulp-prettify');
 var runsequence = require('run-sequence');
+var image = require('gulp-image-resize');
 
 //paths
 var buildpath = './build';
@@ -41,9 +42,40 @@ gulp.task('browserSync', function() {
   })
 });
 gulp.task('watch',function(){
-  runsequence('less','pug','js','browserSync',function(e){
+  runsequence('less','pug','js','image','browserSync',function(e){
   });
   gulp.watch('less/*.less',['less']);
   gulp.watch('templates/*.pug',['pug']);
   gulp.watch('js/*.js',['js']);
+});
+
+
+// gulp icons
+gulp.task("icon36",function(){
+	return gulp.src('assets/icon.png')
+	.pipe(image({width:36,height:36}))
+	.pipe(gulp.dest('app/platforms/android/res/drawable-ldpi'))
+});
+gulp.task("icon48",function(){
+	return gulp.src('assets/icon.png')
+	.pipe(image({width:48,height:48}))
+	.pipe(gulp.dest('app/platforms/android/res/drawable-mdpi'))
+});
+gulp.task("icon72",function(){
+	return gulp.src('assets/icon.png')
+	.pipe(image({width:72,height:72}))
+	.pipe(gulp.dest('app/platforms/android/res/drawable-hdpi'))
+});
+gulp.task("icon96",function(){
+	return gulp.src('assets/icon.png')
+	.pipe(image({width:96,height:96}))
+	.pipe(gulp.dest('app/platforms/android/res/drawable-xhdpi'))
+});
+gulp.task('logo',function(){
+	return gulp.src('assets/icon.png')
+	.pipe(image({width:128,height:128}))
+	.pipe(gulp.dest('build/images/'))
+});
+gulp.task('image',function(){
+	runsequence('icon36','icon48','icon72','icon96','logo');
 });

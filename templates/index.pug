@@ -8,6 +8,7 @@ html
     .app-view
       header
         h1='to do list'
+        img(src='images/icon.png',class='logo')
         button(id='remove') Clear
       main
         ul#task-list
@@ -15,4 +16,5 @@ html
         form#input-form
           input(type='text',name='task-input',id='task-input')
           button='+'
+    script(src='cordova.js')
     script(src='main-min.js')

@@ -1,5 +1,8 @@
-
+//array to store tasks
 var todo = [];
+
+//swipe element
+var swipeelm;
 
 window.addEventListener("load",function(){
   addCordovaEvents();
@@ -7,19 +10,23 @@ window.addEventListener("load",function(){
   showButton("remove",todo);
   //listener for touch on the list of tasks
   document.getElementById("task-list").addEventListener("touchend",function(event){
-    id=event.target.getAttribute("id");
-    document.getElementById(id).setAttribute("class","done");
-    for(i=0;i<todo.length;i++){
-      taskitem = todo[i];
-      if(taskitem.id == id){
-        taskitem.status = 1;
-        saveList(todo);
-      }
+    var id=event.target.getAttribute("id");
+    var elm=document.getElementById(id);
+    if(elm.classList.contains("done")){
+      changeStatus(id,0);
+    }
+    else{
+      changeStatus(id,1);
     }
     showButton("remove",todo);
   });
+
+  //get reference to swipe element
+  swipeelm = document.getElementById('task-list');
+  //add swipe listeners for touchstart and touchend
+  addSwipe(swipeelm,handleSwipe);
   document.getElementById("remove").addEventListener("touchend",function(){
-    //todo.forEach(removeDone(item,index,arr));
+    //when removing items remove from the end of list
     var len = todo.length-1;
     for(i=len;i>=0;i--){
       var item = todo[i];
@@ -105,6 +112,7 @@ function renderList(elm,list_array){
   }
 }
 
+//function used to show or hide the button to remove "done" tasks
 function showButton(element,arr){
   var show=false;
   var len=arr.length;
@@ -120,4 +128,62 @@ function showButton(element,arr){
   else{
     document.getElementById(element).removeAttribute("class");
   }
+}
+
+function changeStatus(id,status){
+  switch(status){
+    case 1:
+      document.getElementById(id).setAttribute("class","done");
+      for(i=0;i<todo.length;i++){
+        taskitem = todo[i];
+        if(taskitem.id == id){
+          taskitem.status = 1;
+          saveList(todo);
+        }
+      }
+      break;
+    case 0:
+      document.getElementById(id).removeAttribute("class");
+      for(i=0;i<todo.length;i++){
+        taskitem = todo[i];
+        if(taskitem.id == id){
+          taskitem.status = 0;
+          saveList(todo);
+        }
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+function addSwipe(elm,callback){
+  elm.addEventListener('touchstart', function(event) {
+      touchstartX = event.changedTouches[0].screenX;
+      touchstartY = event.changedTouches[0].screenY;
+  }, false);
+
+  elm.addEventListener('touchend', function(event) {
+      touchendX = event.changedTouches[0].screenX;
+      touchendY = event.changedTouches[0].screenY;
+      callback;
+  }, false);
+}
+
+function handleGesture() {
+    if (touchendX < touchstartX) {
+        // swipe left
+    }
+    if (touchendX > touchstartX) {
+        // swipe right
+    }
+    if (touchendY < touchstartY) {
+        // swipe down
+    }
+    if (touchendY > touchstartY) {
+        // swipe up
+    }
+    if (touchendY == touchstartY) {
+        // alert('tap!');
+    }
 }
