@@ -129,7 +129,21 @@ function showButton(element,arr){
     document.getElementById(element).removeAttribute("class");
   }
 }
-
+function removeItemFromScreen(){
+  //get all done items
+  var doneitems = document.getElementsByClassName('done');
+  if(doneitems.length>0){
+    var i=0;
+    for(i=0;i<doneitems.length;i++){
+      doneitems[i].classList.add('remove');
+      doneitems[i].style.animationPlayState = 'running';
+    }
+  }
+  //add class for animation
+  //start animation
+  //on end remove the item
+  //remove the item from array
+}
 function changeStatus(id,status){
   switch(status){
     case 1:
