@@ -1,9 +1,6 @@
 //array to store tasks
 var todo = [];
 
-//swipe element
-var swipeelm;
-
 window.addEventListener("load",function(){
   addCordovaEvents();
   loadList(todo);
@@ -22,9 +19,9 @@ window.addEventListener("load",function(){
   });
 
   //get reference to swipe element
-  swipeelm = document.getElementById('task-list');
-  //add swipe listeners for touchstart and touchend
-  addSwipe(swipeelm,handleSwipe);
+  // swipeelm = document.getElementById('task-list');
+  // //add swipe listeners for touchstart and touchend
+  // addSwipe(swipeelm,handleSwipe);
   document.getElementById("remove").addEventListener("touchend",function(){
     //when removing items remove from the end of list
     var len = todo.length-1;
@@ -47,20 +44,28 @@ inputform.addEventListener("submit",function(event){
   event.preventDefault();
   //get task input value
   task = document.getElementById("task-input").value;
-  createTask(task);
-  inputform.reset();
+  //add check for empty value
+  //eg do not add task if the input is empty
+  if(task!="" && task!=undefined){
+    createTask(task);
+    inputform.reset();
+  }
 });
+
 function addCordovaEvents(){
   document.addEventListener("deviceready",onDeviceReady,false);
 }
 function onDeviceReady(){
   document.addEventListener("pause",function(){
+    //when app is paused (eg home button pressed) save list
     saveList(todo);
   },false);
   document.addEventListener("resume",function(){
+    //when app is resumed (brought back from sleep) load list
     loadList(todo);
   },false);
   document.addEventListener("backbutton",function(){
+    //when backbutton is pressed, exit app
     saveList(todo);
     navigator.app.exitApp();
   },false);
@@ -90,7 +95,7 @@ function loadList(list_array){
       console.log("error"+error);
     }
   }
-    renderList("task-list",todo);
+  renderList("task-list",todo);
 }
 
 function renderList(elm,list_array){
@@ -113,6 +118,7 @@ function renderList(elm,list_array){
 }
 
 //function used to show or hide the button to remove "done" tasks
+//this function checks whether to show the "clear" button
 function showButton(element,arr){
   var show=false;
   var len=arr.length;
@@ -129,21 +135,7 @@ function showButton(element,arr){
     document.getElementById(element).removeAttribute("class");
   }
 }
-function removeItemFromScreen(){
-  //get all done items
-  var doneitems = document.getElementsByClassName('done');
-  if(doneitems.length>0){
-    var i=0;
-    for(i=0;i<doneitems.length;i++){
-      doneitems[i].classList.add('remove');
-      doneitems[i].style.animationPlayState = 'running';
-    }
-  }
-  //add class for animation
-  //start animation
-  //on end remove the item
-  //remove the item from array
-}
+
 function changeStatus(id,status){
   switch(status){
     case 1:
@@ -184,7 +176,7 @@ function addSwipe(elm,callback){
   }, false);
 }
 
-function handleGesture() {
+function handleSwipe() {
     if (touchendX < touchstartX) {
         // swipe left
     }

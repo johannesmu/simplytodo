@@ -35,6 +35,9 @@ header h1 {
   padding: 0;
   font-size: 21.6px;
 }
+header .logo {
+  max-width: 32px;
+}
 header button {
   color: inherit;
   padding: 10px;
@@ -102,6 +105,7 @@ footer {
   outline: none;
 }
 #input-form input {
+  width: 80%;
   border: 1px white solid;
   flex: 1 0 0;
   outline: 0;

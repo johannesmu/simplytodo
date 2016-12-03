@@ -105,6 +105,7 @@ footer {
   outline: none;
 }
 #input-form input {
+  width: 80%;
   border: 1px white solid;
   flex: 1 0 0;
   outline: 0;
