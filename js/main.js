@@ -1,5 +1,8 @@
 //array to store tasks
 var todo = [];
+
+
+//swipe variables
 var touchorigin;
 var movement;
 var threshold=150;
@@ -12,7 +15,7 @@ window.addEventListener("load",function(){
   var tasklist = document.getElementById('task-list');
   tasklist.addEventListener("click",function(event){
     //before changing status, short delay
-    var id=event.target.getAttribute("id");
+    var id=event.target.parentNode.getAttribute("id");
     var elm=document.getElementById(id);
     if(elm.classList.contains("done")){
       changeStatus(id,0);
@@ -36,8 +39,11 @@ window.addEventListener("load",function(){
     event.target.style.transform = slide;
   });
   tasklist.addEventListener("touchend",function(event){
-    if(movement<threshold){
-      event.target.style.transform = "translateX(0)";
+    if(movement<=threshold){
+      event.target.style.transform = "translate3D(0,0,0)";
+    }
+    else if(movement>=threshold){
+      event.target.style.transform ="translate3D(100px,0,0)"
     }
   });
 
@@ -126,8 +132,10 @@ function renderList(elm,list_array){
   for(i=0;i<itemstotal;i++){
     item = list_array[i];
     listitem = document.createElement('LI');
+    listitemcontainer = document.createElement('DIV');
     listtext = document.createTextNode(item.name);
-    listitem.appendChild(listtext);
+    listitemcontainer.appendChild(listtext);
+    listitem.appendChild(listitemcontainer);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
     if(item.status==1){
