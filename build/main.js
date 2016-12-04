@@ -6,7 +6,9 @@ window.addEventListener("load",function(){
   loadList(todo);
   showButton("remove",todo);
   //listener for touch on the list of tasks
-  document.getElementById("task-list").addEventListener("touchend",function(event){
+  var tasklist = document.getElementById('task-list');
+  document.getElementById("task-list").addEventListener("click",function(event){
+    //before changing status, short delay
     var id=event.target.getAttribute("id");
     var elm=document.getElementById(id);
     if(elm.classList.contains("done")){
@@ -18,10 +20,6 @@ window.addEventListener("load",function(){
     showButton("remove",todo);
   });
 
-  //get reference to swipe element
-  // swipeelm = document.getElementById('task-list');
-  // //add swipe listeners for touchstart and touchend
-  // addSwipe(swipeelm,handleSwipe);
   document.getElementById("remove").addEventListener("touchend",function(){
     //when removing items remove from the end of list
     var len = todo.length-1;
@@ -30,6 +28,8 @@ window.addEventListener("load",function(){
       if(item.status==1){
         todo.splice(i,1);
         saveList(todo);
+        //before
+        //animateRemoval('task-list');
         renderList("task-list",todo);
       }
     }
@@ -37,10 +37,9 @@ window.addEventListener("load",function(){
   });
 });
 
-
-
 var inputform = document.getElementById("input-form");
 inputform.addEventListener("submit",function(event){
+  console.log(event.target);
   event.preventDefault();
   //get task input value
   task = document.getElementById("task-input").value;
@@ -163,6 +162,22 @@ function changeStatus(id,status){
   }
 }
 
+function animateRemoval(elm){
+  list = document.getElementById(elm);
+  var doneitems = list.getElementsByClassName('done');
+  var len = doneitems.length;
+  var i=0;
+  for(i=0;i<len;i++){
+    item = doneitems[i];
+    item.addEventListener('animationend',function(event){
+      console.log('finished');
+    });
+    //short delay
+    var delay = setTimeout(
+      function(){item.style.animationPlayState='running';}
+      ,500)
+  }
+}
 function addSwipe(elm,callback){
   elm.addEventListener('touchstart', function(event) {
       touchstartX = event.changedTouches[0].screenX;
