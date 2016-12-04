@@ -1,5 +1,8 @@
 //array to store tasks
 var todo = [];
+var touchorigin;
+var movement;
+var threshold=150;
 
 window.addEventListener("load",function(){
   addCordovaEvents();
@@ -7,7 +10,7 @@ window.addEventListener("load",function(){
   showButton("remove",todo);
   //listener for touch on the list of tasks
   var tasklist = document.getElementById('task-list');
-  document.getElementById("task-list").addEventListener("click",function(event){
+  tasklist.addEventListener("click",function(event){
     //before changing status, short delay
     var id=event.target.getAttribute("id");
     var elm=document.getElementById(id);
@@ -20,8 +23,26 @@ window.addEventListener("load",function(){
     showButton("remove",todo);
   });
 
+  tasklist.addEventListener("touchstart",function(event){
+    //record the touch origin
+    touchorigin = event.touches[0].clientX;
+    console.log("origin="+touchorigin);
+  });
+  tasklist.addEventListener("touchmove",function(event){
+    var touchx = event.touches[0].clientX;
+    movement=touchx-touchorigin;
+    var slide = "translate3D("+movement+"px,0px,0px)";
+    console.log(movement);
+    event.target.style.transform = slide;
+  });
+  tasklist.addEventListener("touchend",function(event){
+    if(movement<threshold){
+      event.target.style.transform = "translateX(0)";
+    }
+  });
+
   document.getElementById("remove").addEventListener("touchend",function(){
-    //when removing items remove from the end of list
+    //when removing items remove from the end of list"
     var len = todo.length-1;
     for(i=len;i>=0;i--){
       var item = todo[i];
