@@ -115,6 +115,7 @@ function loadList(list_array){
     try{
       if(JSON.parse(localStorage.getItem("tasks"))){
         todo = JSON.parse(localStorage.getItem("tasks"));
+        //console.log(todo);
       }
     }
     catch(error){
@@ -164,6 +165,7 @@ function showButton(element,arr){
   }
 }
 
+<<<<<<< HEAD
 function changeStatus(id,status){
   switch(status){
     case 1:
@@ -236,4 +238,30 @@ function handleSwipe() {
     if (touchendY == touchstartY) {
         // alert('tap!');
     }
+=======
+function changeStatus(id,status,arr){
+  for(i=0;i<arr.length;i++){
+    taskitem = arr[i];
+    if(taskitem.id == id){
+      taskitem.status = 1;
+      saveList(todo);
+    }
+  }
+}
+
+function addCordovaEvents(){
+  document.addEventListener("deviceready",onDeviceReady,false);
+}
+function onDeviceReady(){
+  document.addEventListener("pause",function(){
+    saveList(todo);
+  },false);
+  document.addEventListener("resume",function(){
+    loadList(todo);
+  },false);
+  document.addEventListener("backbutton",function(){
+    saveList(todo);
+    navigator.app.exitApp();
+  },false);
+>>>>>>> 979016e952ac2abd99c9cf88fd294aa0b34eaf07
 }

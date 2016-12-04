@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To do list</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="app-view">
+      <header>
+        <h1>to do list</h1>
+        <img class="logo" src="images/icon.png">
+        <button id="remove">Clear</button>
+      </header>
+      <main>
+        <ul id="task-list"></ul>
+      </main>
+      <footer>
+        <form id="input-form">
+          <input type="text" name="task-input" id="task-input" placeholder="add task">
+          <button>+</button>
+        </form>
+      </footer>
+    </div>
+    <script src="cordova.js"></script>
+    <script src="main-min.js"></script>
+  </body>
+</html>

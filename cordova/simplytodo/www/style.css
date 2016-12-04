@@ -1,0 +1,130 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 18px;
+  background-color: #e3f2fd;
+  margin: 0;
+  padding: 0;
+}
+.app-view {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 0 0 10px;
+  background-color: #2196F3;
+  height: 50px;
+  font-weight: 200;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 21.6px;
+}
+header .logo {
+  max-width: 32px;
+}
+header button {
+  color: inherit;
+  padding: 10px;
+  height: 100%;
+  font-size: 21.6px;
+  background-color: #0960a5;
+  border: 1px solid #0960a5;
+  outline: 0;
+  opacity: 0;
+  transition: all 1s;
+}
+header #remove.show {
+  opacity: 1;
+}
+main {
+  padding: 50px 0;
+  box-sizing: border-box;
+  max-height: 100%;
+  overflow-y: auto;
+}
+#task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 100%;
+  overflow: hidden;
+}
+#task-list li {
+  padding: 10px;
+  font-size: 27px;
+  color: #808080;
+  transition: all 0.5s;
+  background: white;
+  border-bottom: 1px solid #cccccc;
+  box-shadow: 0 2px 4px #333;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+#task-list li:active {
+  box-shadow: 0 2px 4px #333;
+}
+#task-list li.done {
+  color: #cccccc;
+  text-decoration: line-through;
+  padding-left: 50px;
+  animation: removal 1s;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+  animation-delay: 0.3s;
+  position: relative;
+}
+@keyframes removal {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 105%;
+  }
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+}
+#input-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#input-form button {
+  width: 48px;
+  height: 48px;
+  background-color: #0960a5;
+  color: #b2dbfb;
+  font-size: 28px;
+  border: 1px #0960a5 solid;
+  border-radius: 50%;
+  outline: none;
+}
+#input-form input {
+  width: 90%;
+  border: 1px white solid;
+  outline: 0;
+  font-size: 22px;
+  padding: 2px;
+  box-sizing: border-box;
+}
