@@ -29,37 +29,50 @@ window.addEventListener("load",function(){
   tasklist.addEventListener("touchstart",function(event){
     //record the touch origin -- this is a global
     touchorigin = event.touches[0].clientX;
-    // console.log("origin="+touchorigin);
+    var divwidth = getComputedStyle(event.target).width+'px';
+    //set the width of the div
+    event.target.style.width = divwidth;
   });
   tasklist.addEventListener("touchmove",function(event){
     //get the x position of the touch
     var touchx = event.touches[0].clientX;
     //calculate how far the swipe has moved
     movement=touchx-touchorigin;
+    // console.log(movement);
     var slide = "translate3D("+movement+"px,0px,0px)";
     //identify the touch target tag
-    touchtarget = event.target.tagName;
-      event.target.style.transform = slide;
-  });
-  tasklist.addEventListener("touchend",function(event){
-    switch(movement){
-      case movement<=threshold:
-        event.target.style.transform = "translate3D(0,0,0)";
-        break;
-      case movement>=threshold:
-        event.target.style.transform ="translate3D(100px,0,0)";
-        break;
-      default:
-        break;
-    }
-    // if(movement<=threshold){
-    //   event.target.style.transform = "translate3D(0,0,0)";
-    // }
-    // else if(movement>=threshold){
-    //   event.target.style.transform ="translate3D(100px,0,0)";
-    // }
-  });
+    var touchtarget = event.target.tagName;
+    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
 
+    //only move element if target is a div
+    if(touchtarget.toLowerCase()=="div"){
+      // event.target.style.transform = slide;
+      if(movement>0){
+        button.style.width = movement+"px";
+        button.style.maxWidth = threshold+'px';
+      }
+      else if(movement<0){
+        width = button.style.width;
+        button.style.width = width-movement;
+      }
+    }
+  },{passive:true});
+  tasklist.addEventListener("touchend",function(event){
+    var touchtarget = event.target.tagName;
+    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
+    if(touchtarget.toLowerCase()=="div"){
+      if(movement<threshold){
+        // event.target.style.transform = "translate3D(0,0,0)";
+        button.style.width = '0px';
+      }
+      else if(movement>=threshold){
+        // event.target.style.transform ="translate3D(100px,0,0)";
+      }
+      if(movement<=0){
+        // event.target.style.transform ="translate3D(0,0,0)";
+      }
+    }
+  },{passive:true});
   document.getElementById("remove").addEventListener("touchend",function(){
     //when removing items remove from the end of list"
     var len = todo.length-1;
@@ -156,6 +169,7 @@ function renderList(elm,list_array){
     //add the text into the div element
     listitemcontainer.appendChild(listtext);
     //add the div into the list item
+    listitem.appendChild(listbutton);
     listitem.appendChild(listitemcontainer);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
@@ -213,22 +227,6 @@ function changeStatus(id,status){
   }
 }
 
-function animateRemoval(elm){
-  list = document.getElementById(elm);
-  var doneitems = list.getElementsByClassName('done');
-  var len = doneitems.length;
-  var i=0;
-  for(i=0;i<len;i++){
-    item = doneitems[i];
-    item.addEventListener('animationend',function(event){
-      console.log('finished');
-    });
-    //short delay
-    var delay = setTimeout(
-      function(){item.style.animationPlayState='running';}
-      ,500)
-  }
-}
 function addSwipe(elm,callback){
   elm.addEventListener('touchstart', function(event) {
       touchstartX = event.changedTouches[0].screenX;

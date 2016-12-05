@@ -56,8 +56,8 @@ gulp.task('watch',function(){
 
 //move to app
 gulp.task('cordova',function(){
-	return gulp.src('./build/**')
-	.pipe(gulp.dest('./app/www'));
+	return gulp.src('build/**.**')
+	.pipe(gulp.dest('app/www'));
 });
 // gulp icons
 gulp.task("icon36",function(){
@@ -85,11 +85,16 @@ gulp.task('logo',function(){
 	.pipe(image({width:128,height:128}))
 	.pipe(gulp.dest('build/images/'))
 });
+gulp.task('tick',function(){
+	return gulp.src('assets/tick.png')
+	.pipe(image({width:128,height:128}))
+	.pipe(gulp.dest('build/images'))
+});
 gulp.task('image',function(){
-	runsequence('icon36','icon48','icon72','icon96','logo');
+	runsequence('icon36','icon48','icon72','icon96','logo','tick');
 	gulp.watch('build/**.**',['cordova']);
 });
 gulp.task('cordova',function(){
 	return gulp.src('build/**.**')
-	.pipe(gulp.dest('./cordova/simplytodo/www'));
+	.pipe(gulp.dest('app/www/'));
 });

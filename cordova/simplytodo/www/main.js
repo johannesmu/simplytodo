@@ -29,7 +29,6 @@ window.addEventListener("load",function(){
   tasklist.addEventListener("touchstart",function(event){
     //record the touch origin -- this is a global
     touchorigin = event.touches[0].clientX;
-    // console.log("origin="+touchorigin);
   });
   tasklist.addEventListener("touchmove",function(event){
     //get the x position of the touch
@@ -38,28 +37,26 @@ window.addEventListener("load",function(){
     movement=touchx-touchorigin;
     var slide = "translate3D("+movement+"px,0px,0px)";
     //identify the touch target tag
-    touchtarget = event.target.tagName;
+    var touchtarget = event.target.tagName;
+    //only move element if target is a div
+    if(touchtarget.toLowerCase()=="div"){
       event.target.style.transform = slide;
+    }
   });
   tasklist.addEventListener("touchend",function(event){
-    switch(movement){
-      case movement<=threshold:
+    var touchtarget = event.target.tagName;
+    if(touchtarget.toLowerCase()=="div"){
+      if(movement<=threshold && movement > 0){
         event.target.style.transform = "translate3D(0,0,0)";
-        break;
-      case movement>=threshold:
-        event.target.style.transform ="translate3D(100px,0,0)";
-        break;
-      default:
-        break;
+      }
+      else if(movement>=threshold){
+        event.target.style.transform ="translate3D(200px,0,0)";
+      }
+      if(movement<=0){
+        event.target.style.transform ="translate3D(0,0,0)";
+      }
     }
-    // if(movement<=threshold){
-    //   event.target.style.transform = "translate3D(0,0,0)";
-    // }
-    // else if(movement>=threshold){
-    //   event.target.style.transform ="translate3D(100px,0,0)";
-    // }
   });
-
   document.getElementById("remove").addEventListener("touchend",function(){
     //when removing items remove from the end of list"
     var len = todo.length-1;
@@ -213,22 +210,6 @@ function changeStatus(id,status){
   }
 }
 
-function animateRemoval(elm){
-  list = document.getElementById(elm);
-  var doneitems = list.getElementsByClassName('done');
-  var len = doneitems.length;
-  var i=0;
-  for(i=0;i<len;i++){
-    item = doneitems[i];
-    item.addEventListener('animationend',function(event){
-      console.log('finished');
-    });
-    //short delay
-    var delay = setTimeout(
-      function(){item.style.animationPlayState='running';}
-      ,500)
-  }
-}
 function addSwipe(elm,callback){
   elm.addEventListener('touchstart', function(event) {
       touchstartX = event.changedTouches[0].screenX;

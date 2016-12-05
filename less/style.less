@@ -111,11 +111,22 @@ main{
       background:white;
       padding:10px;
       word-wrap: break-word;
-      flex:auto;
+      flex:1 0 0;
+      // width:100%;
+      // min-width: 100%;
     }
   }
-  li:active{
-    box-shadow: 0 2px 4px #333;
+  li button{
+    background-color:@main-color;
+    background-image:url('images/tick.png');
+    background-size:30px;
+    background-position: center center;
+    overflow:hidden;
+    width:0;
+    padding:0;
+    background-repeat:no-repeat;
+    outline:0;
+    border:0;
   }
   li.done{
     color:darken(@main-font-color,20%);
