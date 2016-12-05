@@ -99,15 +99,20 @@ main{
   max-height: 100%;
   .hidden;
   li{
-    padding:10px;
+    padding:0;
     font-size: @main-font-size*1.5;
     color:darken(@main-font-color,50%);
     transition:all 0.5s;
-    background:white;
+    background:green;
     border-bottom:1px solid #cccccc;
-    box-shadow: 0 2px 4px #333;
     overflow: hidden;
-    word-wrap: break-word;
+    .flex-row;
+    div{
+      background:white;
+      padding:10px;
+      word-wrap: break-word;
+      flex:auto;
+    }
   }
   li:active{
     box-shadow: 0 2px 4px #333;
@@ -115,7 +120,7 @@ main{
   li.done{
     color:darken(@main-font-color,20%);
     text-decoration: line-through;
-    padding-left:50px;
+    // padding-left:50px;
     animation: removal 1s;
     animation-play-state: paused;
     animation-fill-mode: forwards;

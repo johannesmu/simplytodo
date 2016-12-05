@@ -51,7 +51,7 @@ gulp.task('watch',function(){
   gulp.watch('less/*.less',['less']);
   gulp.watch('templates/*.pug',['pug']);
   gulp.watch('js/*.js',['js']);
-	gulp.watch('build/**',['cordova']);
+	gulp.watch('build/**.**',['cordova']);
 });
 
 //move to app

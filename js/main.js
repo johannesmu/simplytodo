@@ -14,7 +14,7 @@ window.addEventListener("load",function(){
   //listener for touch on the list of tasks
   var tasklist = document.getElementById('task-list');
   tasklist.addEventListener("click",function(event){
-    //before changing status, short delay
+    //get the parent of the target
     var id=event.target.parentNode.getAttribute("id");
     var elm=document.getElementById(id);
     if(elm.classList.contains("done")){
@@ -27,24 +27,37 @@ window.addEventListener("load",function(){
   });
 
   tasklist.addEventListener("touchstart",function(event){
-    //record the touch origin
+    //record the touch origin -- this is a global
     touchorigin = event.touches[0].clientX;
-    console.log("origin="+touchorigin);
+    // console.log("origin="+touchorigin);
   });
   tasklist.addEventListener("touchmove",function(event){
+    //get the x position of the touch
     var touchx = event.touches[0].clientX;
+    //calculate how far the swipe has moved
     movement=touchx-touchorigin;
     var slide = "translate3D("+movement+"px,0px,0px)";
-    console.log(movement);
-    event.target.style.transform = slide;
+    //identify the touch target tag
+    touchtarget = event.target.tagName;
+      event.target.style.transform = slide;
   });
   tasklist.addEventListener("touchend",function(event){
-    if(movement<=threshold){
-      event.target.style.transform = "translate3D(0,0,0)";
+    switch(movement){
+      case movement<=threshold:
+        event.target.style.transform = "translate3D(0,0,0)";
+        break;
+      case movement>=threshold:
+        event.target.style.transform ="translate3D(100px,0,0)";
+        break;
+      default:
+        break;
     }
-    else if(movement>=threshold){
-      event.target.style.transform ="translate3D(100px,0,0)"
-    }
+    // if(movement<=threshold){
+    //   event.target.style.transform = "translate3D(0,0,0)";
+    // }
+    // else if(movement>=threshold){
+    //   event.target.style.transform ="translate3D(100px,0,0)";
+    // }
   });
 
   document.getElementById("remove").addEventListener("touchend",function(){
@@ -132,10 +145,17 @@ function renderList(elm,list_array){
   itemstotal = list_array.length;
   for(i=0;i<itemstotal;i++){
     item = list_array[i];
+    //create the list item
     listitem = document.createElement('LI');
+    //create the div for the text of task
     listitemcontainer = document.createElement('DIV');
+    //create the task text using its name
     listtext = document.createTextNode(item.name);
+    //create the remove button
+    listbutton = document.createElement('BUTTON');
+    //add the text into the div element
     listitemcontainer.appendChild(listtext);
+    //add the div into the list item
     listitem.appendChild(listitemcontainer);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
@@ -165,7 +185,7 @@ function showButton(element,arr){
   }
 }
 
-<<<<<<< HEAD
+
 function changeStatus(id,status){
   switch(status){
     case 1:
@@ -238,7 +258,7 @@ function handleSwipe() {
     if (touchendY == touchstartY) {
         // alert('tap!');
     }
-=======
+}
 function changeStatus(id,status,arr){
   for(i=0;i<arr.length;i++){
     taskitem = arr[i];
@@ -263,5 +283,4 @@ function onDeviceReady(){
     saveList(todo);
     navigator.app.exitApp();
   },false);
->>>>>>> 979016e952ac2abd99c9cf88fd294aa0b34eaf07
 }
