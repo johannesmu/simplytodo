@@ -66,23 +66,38 @@ main {
   overflow: hidden;
 }
 #task-list li {
-  padding: 10px;
+  padding: 0;
   font-size: 27px;
   color: #808080;
   transition: all 0.5s;
-  background: white;
+  background: green;
   border-bottom: 1px solid #cccccc;
-  box-shadow: 0 2px 4px #333;
   overflow: hidden;
-  word-wrap: break-word;
+  display: flex;
+  flex-direction: row;
 }
-#task-list li:active {
-  box-shadow: 0 2px 4px #333;
+#task-list li div {
+  background: white;
+  padding: 10px;
+  word-wrap: break-word;
+  flex: 1 0 0;
+}
+#task-list li button {
+  background-color: #0c7cd5;
+  background-image: url('images/tick.png');
+  background-size: 30px;
+  background-position: center center;
+  overflow: hidden;
+  max-width: 150px;
+  width: 0;
+  padding: 0;
+  background-repeat: no-repeat;
+  outline: 0;
+  border: 0;
 }
 #task-list li.done {
   color: #cccccc;
   text-decoration: line-through;
-  padding-left: 50px;
   animation: removal 1s;
   animation-play-state: paused;
   animation-fill-mode: forwards;

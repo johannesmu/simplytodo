@@ -1,16 +1,21 @@
 //array to store tasks
 var todo = [];
 
-//swipe element
-var swipeelm;
+
+//swipe variables
+var touchorigin;
+var movement;
+var threshold=150;
 
 window.addEventListener("load",function(){
   addCordovaEvents();
   loadList(todo);
   showButton("remove",todo);
   //listener for touch on the list of tasks
-  document.getElementById("task-list").addEventListener("touchend",function(event){
-    var id=event.target.getAttribute("id");
+  var tasklist = document.getElementById('task-list');
+  tasklist.addEventListener("click",function(event){
+    //get the parent of the target
+    var id=event.target.parentNode.getAttribute("id");
     var elm=document.getElementById(id);
     if(elm.classList.contains("done")){
       changeStatus(id,0);
@@ -21,18 +26,62 @@ window.addEventListener("load",function(){
     showButton("remove",todo);
   });
 
-  //get reference to swipe element
-  // swipeelm = document.getElementById('task-list');
-  // //add swipe listeners for touchstart and touchend
-  // addSwipe(swipeelm,handleSwipe);
+  tasklist.addEventListener("touchstart",function(event){
+    //record the touch origin -- this is a global
+    touchorigin = event.touches[0].clientX;
+    var divwidth = getComputedStyle(event.target).width+'px';
+    //set the width of the div
+    event.target.style.width = divwidth;
+  });
+  tasklist.addEventListener("touchmove",function(event){
+    //get the x position of the touch
+    var touchx = event.touches[0].clientX;
+    //calculate how far the swipe has moved
+    movement=touchx-touchorigin;
+    // console.log(movement);
+    var slide = "translate3D("+movement+"px,0px,0px)";
+    //identify the touch target tag
+    var touchtarget = event.target.tagName;
+    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
+
+    //only move element if target is a div
+    if(touchtarget.toLowerCase()=="div"){
+      // event.target.style.transform = slide;
+      if(movement>0){
+        button.style.width = movement+"px";
+      }
+      else if(movement<0){
+        width = button.style.width;
+        button.style.width = width-movement;
+      }
+    }
+  },{passive:true});
+  tasklist.addEventListener("touchend",function(event){
+    var touchtarget = event.target.tagName;
+    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
+    if(touchtarget.toLowerCase()=="div"){
+      if(movement<threshold){
+        // event.target.style.transform = "translate3D(0,0,0)";
+        button.style.width = '0px';
+      }
+      else if(movement>=threshold){
+        // event.target.style.transform ="translate3D(100px,0,0)";
+      }
+      if(movement<=0){
+        // event.target.style.transform ="translate3D(0,0,0)";
+      }
+    }
+  },{passive:true});
   document.getElementById("remove").addEventListener("touchend",function(){
-    //when removing items remove from the end of list
+    //when removing items remove from the end of list"
     var len = todo.length-1;
     for(i=len;i>=0;i--){
       var item = todo[i];
       if(item.status==1){
         todo.splice(i,1);
         saveList(todo);
+        //before
+        //animateRemoval('task-list');
         renderList("task-list",todo);
       }
     }
@@ -40,27 +89,34 @@ window.addEventListener("load",function(){
   });
 });
 
-
-
 var inputform = document.getElementById("input-form");
 inputform.addEventListener("submit",function(event){
+  console.log(event.target);
   event.preventDefault();
   //get task input value
   task = document.getElementById("task-input").value;
-  createTask(task);
-  inputform.reset();
+  //add check for empty value
+  //eg do not add task if the input is empty
+  if(task!="" && task!=undefined){
+    createTask(task);
+    inputform.reset();
+  }
 });
+
 function addCordovaEvents(){
   document.addEventListener("deviceready",onDeviceReady,false);
 }
 function onDeviceReady(){
   document.addEventListener("pause",function(){
+    //when app is paused (eg home button pressed) save list
     saveList(todo);
   },false);
   document.addEventListener("resume",function(){
+    //when app is resumed (brought back from sleep) load list
     loadList(todo);
   },false);
   document.addEventListener("backbutton",function(){
+    //when backbutton is pressed, exit app
     saveList(todo);
     navigator.app.exitApp();
   },false);
@@ -84,13 +140,14 @@ function loadList(list_array){
     try{
       if(JSON.parse(localStorage.getItem("tasks"))){
         todo = JSON.parse(localStorage.getItem("tasks"));
+        //console.log(todo);
       }
     }
     catch(error){
       console.log("error"+error);
     }
   }
-    renderList("task-list",todo);
+  renderList("task-list",todo);
 }
 
 function renderList(elm,list_array){
@@ -100,9 +157,19 @@ function renderList(elm,list_array){
   itemstotal = list_array.length;
   for(i=0;i<itemstotal;i++){
     item = list_array[i];
+    //create the list item
     listitem = document.createElement('LI');
+    //create the div for the text of task
+    listitemcontainer = document.createElement('DIV');
+    //create the task text using its name
     listtext = document.createTextNode(item.name);
-    listitem.appendChild(listtext);
+    //create the remove button
+    listbutton = document.createElement('BUTTON');
+    //add the text into the div element
+    listitemcontainer.appendChild(listtext);
+    //add the div into the list item
+    listitem.appendChild(listbutton);
+    listitem.appendChild(listitemcontainer);
     listitem.setAttribute("id",item.id);
     listitem.setAttribute("data-status",item.status);
     if(item.status==1){
@@ -113,6 +180,7 @@ function renderList(elm,list_array){
 }
 
 //function used to show or hide the button to remove "done" tasks
+//this function checks whether to show the "clear" button
 function showButton(element,arr){
   var show=false;
   var len=arr.length;
@@ -129,21 +197,8 @@ function showButton(element,arr){
     document.getElementById(element).removeAttribute("class");
   }
 }
-function removeItemFromScreen(){
-  //get all done items
-  var doneitems = document.getElementsByClassName('done');
-  if(doneitems.length>0){
-    var i=0;
-    for(i=0;i<doneitems.length;i++){
-      doneitems[i].classList.add('remove');
-      doneitems[i].style.animationPlayState = 'running';
-    }
-  }
-  //add class for animation
-  //start animation
-  //on end remove the item
-  //remove the item from array
-}
+
+
 function changeStatus(id,status){
   switch(status){
     case 1:
@@ -200,4 +255,29 @@ function handleSwipe() {
     if (touchendY == touchstartY) {
         // alert('tap!');
     }
+}
+function changeStatus(id,status,arr){
+  for(i=0;i<arr.length;i++){
+    taskitem = arr[i];
+    if(taskitem.id == id){
+      taskitem.status = 1;
+      saveList(todo);
+    }
+  }
+}
+
+function addCordovaEvents(){
+  document.addEventListener("deviceready",onDeviceReady,false);
+}
+function onDeviceReady(){
+  document.addEventListener("pause",function(){
+    saveList(todo);
+  },false);
+  document.addEventListener("resume",function(){
+    loadList(todo);
+  },false);
+  document.addEventListener("backbutton",function(){
+    saveList(todo);
+    navigator.app.exitApp();
+  },false);
 }
