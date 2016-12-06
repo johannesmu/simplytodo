@@ -46,11 +46,11 @@ header button {
   background-color: #0960a5;
   border: 1px solid #0960a5;
   outline: 0;
-  visibility: hidden;
-  transition: all 0.5s;
+  opacity: 0;
+  transition: all 1s;
 }
 header #remove.show {
-  visibility: visible;
+  opacity: 1;
 }
 main {
   padding: 50px 0;
@@ -73,6 +73,8 @@ main {
   background: white;
   border-bottom: 1px solid #cccccc;
   box-shadow: 0 2px 4px #333;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 #task-list li:active {
   box-shadow: 0 2px 4px #333;
@@ -81,6 +83,19 @@ main {
   color: #cccccc;
   text-decoration: line-through;
   padding-left: 50px;
+  animation: removal 1s;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+  animation-delay: 0.3s;
+  position: relative;
+}
+@keyframes removal {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 105%;
+  }
 }
 footer {
   position: absolute;
@@ -93,6 +108,7 @@ footer {
 #input-form {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 #input-form button {
   width: 48px;
@@ -105,8 +121,8 @@ footer {
   outline: none;
 }
 #input-form input {
+  width: 90%;
   border: 1px white solid;
-  flex: 1 0 0;
   outline: 0;
   font-size: 22px;
   padding: 2px;

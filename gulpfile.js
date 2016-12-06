@@ -47,9 +47,14 @@ gulp.task('watch',function(){
   gulp.watch('less/*.less',['less']);
   gulp.watch('templates/*.pug',['pug']);
   gulp.watch('js/*.js',['js']);
+	gulp.watch('build/**');
 });
 
-
+//move to app
+gulp.task('cordova',function(){
+	return gulp.src('./build/**')
+	.pipe(gulp.dest('./app/www'));
+});
 // gulp icons
 gulp.task("icon36",function(){
 	return gulp.src('assets/icon.png')
