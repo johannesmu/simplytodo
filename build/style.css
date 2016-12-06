@@ -83,11 +83,12 @@ main {
   flex: 1 0 0;
 }
 #task-list li button {
-  background-color: #2196F3;
+  background-color: #0c7cd5;
   background-image: url('images/tick.png');
   background-size: 30px;
   background-position: center center;
   overflow: hidden;
+  max-width: 150px;
   width: 0;
   padding: 0;
   background-repeat: no-repeat;

@@ -49,7 +49,6 @@ window.addEventListener("load",function(){
       // event.target.style.transform = slide;
       if(movement>0){
         button.style.width = movement+"px";
-        button.style.maxWidth = threshold+'px';
       }
       else if(movement<0){
         width = button.style.width;
