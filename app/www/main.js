@@ -13,63 +13,70 @@ window.addEventListener("load",function(){
   showButton("remove",todo);
   //listener for touch on the list of tasks
   var tasklist = document.getElementById('task-list');
-  tasklist.addEventListener("click",function(event){
-    //get the parent of the target
-    var id=event.target.parentNode.getAttribute("id");
-    var elm=document.getElementById(id);
-    if(elm.classList.contains("done")){
-      changeStatus(id,0);
-    }
-    else{
-      changeStatus(id,1);
-    }
-    showButton("remove",todo);
-  });
+  // tasklist.addEventListener("click",function(event){
+  //   //get the parent of the target
+  //   var id=event.target.parentNode.parentNode.getAttribute("id");
+  //   var elm=document.getElementById(id);
+  //   console.log(elm);
+  //   if(elm.classList.contains("done")){
+  //     changeStatus(id,0);
+  //   }
+  //   else{
+  //     changeStatus(id,1);
+  //   }
+  //   showButton("remove",todo);
+  // });
 
   tasklist.addEventListener("touchstart",function(event){
     //record the touch origin -- this is a global
     touchorigin = event.touches[0].clientX;
-    var divwidth = getComputedStyle(event.target).width+'px';
-    //set the width of the div
-    event.target.style.width = divwidth;
   });
   tasklist.addEventListener("touchmove",function(event){
     //get the x position of the touch
     var touchx = event.touches[0].clientX;
     //calculate how far the swipe has moved
     movement=touchx-touchorigin;
-    // console.log(movement);
-    var slide = "translate3D("+movement+"px,0px,0px)";
     //identify the touch target tag
     var touchtarget = event.target.tagName;
-    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
-
+    //since the target is the text-container we need to get the parent of its parent
+    //=the li element, then get to the button
+    var button = event.target.parentNode.parentNode.getElementsByTagName('BUTTON')[0];
     //only move element if target is a div
     if(touchtarget.toLowerCase()=="div"){
       // event.target.style.transform = slide;
-      if(movement>0){
+      if(movement>0 && movement<=threshold+50){
+        //if movement is less than the threshold
         button.style.width = movement+"px";
       }
       else if(movement<0){
-        width = button.style.width;
-        button.style.width = width-movement;
+        width = parseFloat(button.style.width,10);
+        button.style.width = threshold+movement+"px";
       }
     }
   },{passive:true});
+  //add a listener when the touch ends
   tasklist.addEventListener("touchend",function(event){
     var touchtarget = event.target.tagName;
-    var button = event.target.parentNode.getElementsByTagName('BUTTON')[0];
+    //since the target is the text-container we need to get the parent of its parent
+    //=the li element, then get to the button
+    var button = event.target.parentNode.parentNode.getElementsByTagName('BUTTON')[0];
     if(touchtarget.toLowerCase()=="div"){
-      if(movement<threshold){
-        // event.target.style.transform = "translate3D(0,0,0)";
+      //if swipe right does not go beyond threshold, change button back to 0 width
+      if(movement<threshold && movement>0){
         button.style.width = '0px';
       }
-      else if(movement>=threshold){
-        // event.target.style.transform ="translate3D(100px,0,0)";
+      //if swipe left (movement<0) and it is smaller than threshold
+      //snap button back to 0
+      else if(movement<0 && movement<threshold){
+        button.style.width = '0px';
       }
-      if(movement<=0){
-        // event.target.style.transform ="translate3D(0,0,0)";
-      }
+    }
+    //if touchtarget is a button
+    if(touchtarget.toLowerCase()=='button'){
+      //identify the button, which is the same as list item id
+      var buttonid = event.target.getAttribute('data-id');
+      //get the list item with the same id
+      toggleStatus(buttonid);
     }
   },{passive:true});
   document.getElementById("remove").addEventListener("touchend",function(){
@@ -80,8 +87,6 @@ window.addEventListener("load",function(){
       if(item.status==1){
         todo.splice(i,1);
         saveList(todo);
-        //before
-        //animateRemoval('task-list');
         renderList("task-list",todo);
       }
     }
@@ -91,7 +96,6 @@ window.addEventListener("load",function(){
 
 var inputform = document.getElementById("input-form");
 inputform.addEventListener("submit",function(event){
-  console.log(event.target);
   event.preventDefault();
   //get task input value
   task = document.getElementById("task-input").value;
@@ -140,7 +144,6 @@ function loadList(list_array){
     try{
       if(JSON.parse(localStorage.getItem("tasks"))){
         todo = JSON.parse(localStorage.getItem("tasks"));
-        //console.log(todo);
       }
     }
     catch(error){
@@ -161,12 +164,18 @@ function renderList(elm,list_array){
     listitem = document.createElement('LI');
     //create the div for the text of task
     listitemcontainer = document.createElement('DIV');
+    //text container to prevent text from shrinking on swipe
+    txtcontainer = document.createElement('DIV');
+    txtcontainer.setAttribute("class","text-container")
+    //give the text container a class
     //create the task text using its name
     listtext = document.createTextNode(item.name);
     //create the remove button
     listbutton = document.createElement('BUTTON');
+    listbutton.setAttribute('data-id',item.id);
     //add the text into the div element
-    listitemcontainer.appendChild(listtext);
+    txtcontainer.appendChild(listtext);
+    listitemcontainer.appendChild(txtcontainer);
     //add the div into the list item
     listitem.appendChild(listbutton);
     listitem.appendChild(listitemcontainer);
@@ -174,6 +183,7 @@ function renderList(elm,list_array){
     listitem.setAttribute("data-status",item.status);
     if(item.status==1){
       listitem.setAttribute("class","done");
+      listbutton.setAttribute('width',threshold);
     }
     container.appendChild(listitem);
   }
@@ -197,7 +207,9 @@ function showButton(element,arr){
     document.getElementById(element).removeAttribute("class");
   }
 }
-
+function toggleStatus(id){
+  //find element by the id and change status from current
+}
 
 function changeStatus(id,status){
   switch(status){
@@ -226,36 +238,36 @@ function changeStatus(id,status){
   }
 }
 
-function addSwipe(elm,callback){
-  elm.addEventListener('touchstart', function(event) {
-      touchstartX = event.changedTouches[0].screenX;
-      touchstartY = event.changedTouches[0].screenY;
-  }, false);
-
-  elm.addEventListener('touchend', function(event) {
-      touchendX = event.changedTouches[0].screenX;
-      touchendY = event.changedTouches[0].screenY;
-      callback;
-  }, false);
-}
-
-function handleSwipe() {
-    if (touchendX < touchstartX) {
-        // swipe left
-    }
-    if (touchendX > touchstartX) {
-        // swipe right
-    }
-    if (touchendY < touchstartY) {
-        // swipe down
-    }
-    if (touchendY > touchstartY) {
-        // swipe up
-    }
-    if (touchendY == touchstartY) {
-        // alert('tap!');
-    }
-}
+// function addSwipe(elm,callback){
+//   elm.addEventListener('touchstart', function(event) {
+//       touchstartX = event.changedTouches[0].screenX;
+//       touchstartY = event.changedTouches[0].screenY;
+//   }, false);
+//
+//   elm.addEventListener('touchend', function(event) {
+//       touchendX = event.changedTouches[0].screenX;
+//       touchendY = event.changedTouches[0].screenY;
+//       callback;
+//   }, false);
+// }
+//
+// function handleSwipe() {
+//     if (touchendX < touchstartX) {
+//         // swipe left
+//     }
+//     if (touchendX > touchstartX) {
+//         // swipe right
+//     }
+//     if (touchendY < touchstartY) {
+//         // swipe down
+//     }
+//     if (touchendY > touchstartY) {
+//         // swipe up
+//     }
+//     if (touchendY == touchstartY) {
+//         // alert('tap!');
+//     }
+// }
 function changeStatus(id,status,arr){
   for(i=0;i<arr.length;i++){
     taskitem = arr[i];

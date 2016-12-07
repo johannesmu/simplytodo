@@ -76,11 +76,16 @@ main {
   display: flex;
   flex-direction: row;
 }
-#task-list li div {
+#task-list li > div {
   background: white;
   padding: 10px;
   word-wrap: break-word;
   flex: 1 0 0;
+  flex-shrink: 0;
+  overflow-x: hidden;
+}
+#task-list li > div .text-container {
+  min-width: 100vw;
 }
 #task-list li button {
   background-color: #0c7cd5;
@@ -95,22 +100,9 @@ main {
   outline: 0;
   border: 0;
 }
-#task-list li.done {
+#task-list li.done .text-container {
   color: #cccccc;
   text-decoration: line-through;
-  animation: removal 1s;
-  animation-play-state: paused;
-  animation-fill-mode: forwards;
-  animation-delay: 0.3s;
-  position: relative;
-}
-@keyframes removal {
-  0% {
-    left: 0;
-  }
-  100% {
-    left: 105%;
-  }
 }
 footer {
   position: absolute;

@@ -107,13 +107,17 @@ main{
     border-bottom:1px solid #cccccc;
     overflow: hidden;
     .flex-row;
-    div{
+    >div{
       background:white;
       padding:10px;
       word-wrap: break-word;
       flex:1 0 0;
-      // width:100%;
-      // min-width: 100%;
+      flex-shrink: 0;
+      //set overflow to allow button to expand
+      overflow-x:hidden;
+      .text-container{
+        min-width: 100vw;
+      }
     }
     button{
       background-color:darken(@main-color,10%);
@@ -129,25 +133,13 @@ main{
       border:0;
     }
   }
-  li.done{
+  li.done .text-container{
     color:darken(@main-font-color,20%);
     text-decoration: line-through;
     // padding-left:50px;
-    animation: removal 1s;
-    animation-play-state: paused;
-    animation-fill-mode: forwards;
-    animation-delay:0.3s;
-    position:relative;
   }
 }
-@keyframes removal {
-  0%{
-    left:0;
-  }
-  100%{
-    left:105%;
-  }
-}
+
 footer{
   .absolute;
   bottom:0;
