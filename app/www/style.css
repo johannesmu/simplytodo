@@ -75,6 +75,8 @@ main {
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  max-height: 120px;
+  transition: all 1s;
 }
 #task-list li > div {
   background: white;
