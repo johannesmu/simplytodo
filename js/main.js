@@ -50,7 +50,7 @@ inputform.addEventListener("submit",function(event){
     inputform.reset();
   }
 });
-
+//cordova events are for interactions with phone
 function addCordovaEvents(){
   document.addEventListener("deviceready",onDeviceReady,false);
 }
@@ -70,9 +70,8 @@ function onDeviceReady(){
   },false);
 }
 function createTask(task){
-  id = new Date().getTime();
-  name = task;
-  taskitem ={id:id,name:name,status:0};
+  timestamp = new Date().getTime();
+  taskitem ={id:id,name:task,status:0};
   todo.push(taskitem);
   renderList("task-list",todo);
 }
@@ -138,7 +137,9 @@ function showButton(element,arr){
 function changeStatus(id,status){
   switch(status){
     case 1:
+      //get the element by its id and add a class "done" to it
       document.getElementById(id).setAttribute("class","done");
+      //find item in array and change its status
       for(i=0;i<todo.length;i++){
         taskitem = todo[i];
         if(taskitem.id == id){
@@ -148,7 +149,9 @@ function changeStatus(id,status){
       }
       break;
     case 0:
+      //get the element by its id and remove class "done" from it
       document.getElementById(id).removeAttribute("class");
+      //find item in array and change its status
       for(i=0;i<todo.length;i++){
         taskitem = todo[i];
         if(taskitem.id == id){
@@ -160,51 +163,4 @@ function changeStatus(id,status){
     default:
       break;
   }
-}
-
-function animateRemoval(elm){
-  list = document.getElementById(elm);
-  var doneitems = list.getElementsByClassName('done');
-  var len = doneitems.length;
-  var i=0;
-  for(i=0;i<len;i++){
-    item = doneitems[i];
-    item.addEventListener('animationend',function(event){
-      console.log('finished');
-    });
-    //short delay
-    var delay = setTimeout(
-      function(){item.style.animationPlayState='running';}
-      ,500)
-  }
-}
-function addSwipe(elm,callback){
-  elm.addEventListener('touchstart', function(event) {
-      touchstartX = event.changedTouches[0].screenX;
-      touchstartY = event.changedTouches[0].screenY;
-  }, false);
-
-  elm.addEventListener('touchend', function(event) {
-      touchendX = event.changedTouches[0].screenX;
-      touchendY = event.changedTouches[0].screenY;
-      callback;
-  }, false);
-}
-
-function handleSwipe() {
-    if (touchendX < touchstartX) {
-        // swipe left
-    }
-    if (touchendX > touchstartX) {
-        // swipe right
-    }
-    if (touchendY < touchstartY) {
-        // swipe down
-    }
-    if (touchendY > touchstartY) {
-        // swipe up
-    }
-    if (touchendY == touchstartY) {
-        // alert('tap!');
-    }
 }
