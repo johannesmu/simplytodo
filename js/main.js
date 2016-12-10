@@ -8,7 +8,7 @@ window.addEventListener("load",function(){
   //listener for touch on the list of tasks
   var tasklist = document.getElementById('task-list');
   document.getElementById("task-list").addEventListener("click",function(event){
-    //before changing status, short delay
+    //before changing status
     var id=event.target.getAttribute("id");
     var elm=document.getElementById(id);
     if(elm.classList.contains("done")){
@@ -28,8 +28,6 @@ window.addEventListener("load",function(){
       if(item.status==1){
         todo.splice(i,1);
         saveList(todo);
-        //before
-        //animateRemoval('task-list');
         renderList("task-list",todo);
       }
     }
