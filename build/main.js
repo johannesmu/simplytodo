@@ -29,7 +29,6 @@ window.addEventListener("load",function(){
         todo.splice(i,1);
         saveList(todo);
         //before
-        //animateRemoval('task-list');
         renderList("task-list",todo);
       }
     }
@@ -160,51 +159,4 @@ function changeStatus(id,status){
     default:
       break;
   }
-}
-
-function animateRemoval(elm){
-  list = document.getElementById(elm);
-  var doneitems = list.getElementsByClassName('done');
-  var len = doneitems.length;
-  var i=0;
-  for(i=0;i<len;i++){
-    item = doneitems[i];
-    item.addEventListener('animationend',function(event){
-      console.log('finished');
-    });
-    //short delay
-    var delay = setTimeout(
-      function(){item.style.animationPlayState='running';}
-      ,500)
-  }
-}
-function addSwipe(elm,callback){
-  elm.addEventListener('touchstart', function(event) {
-      touchstartX = event.changedTouches[0].screenX;
-      touchstartY = event.changedTouches[0].screenY;
-  }, false);
-
-  elm.addEventListener('touchend', function(event) {
-      touchendX = event.changedTouches[0].screenX;
-      touchendY = event.changedTouches[0].screenY;
-      callback;
-  }, false);
-}
-
-function handleSwipe() {
-    if (touchendX < touchstartX) {
-        // swipe left
-    }
-    if (touchendX > touchstartX) {
-        // swipe right
-    }
-    if (touchendY < touchstartY) {
-        // swipe down
-    }
-    if (touchendY > touchstartY) {
-        // swipe up
-    }
-    if (touchendY == touchstartY) {
-        // alert('tap!');
-    }
 }
